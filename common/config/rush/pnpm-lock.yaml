@@ -34,6 +34,9 @@ importers:
       '@types/node':
         specifier: ^18.19.0
         version: 18.19.130
+      husky:
+        specifier: ~9.1.7
+        version: 9.1.7
       jest:
         specifier: ^29.7.0
         version: 29.7.0(@types/node@18.19.130)
@@ -464,7 +467,7 @@ packages:
     engines: {node: '>= 8'}
 
   '@rush-temp/heft-stylelint-plugin@file:projects/heft-stylelint-plugin.tgz':
-    resolution: {integrity: sha512-bR2NddJwRYaQwo79b5SYpEIUYkmA0KjBu5Uc8oBhf9EHix3Ylu0u94YeaAq+Y/HtR1G8eY/QegH5op9ZahBOdg==, tarball: file:projects/heft-stylelint-plugin.tgz}
+    resolution: {integrity: sha512-gBQTYQGgwSQErTRRaohUmHCGeQMW3CS1jDojupP7HP4nR8vZQi6TZb39a31Y+dMjHbcpfNYMOfyDWLc2KVPDmQ==, tarball: file:projects/heft-stylelint-plugin.tgz}
     version: 0.0.0
 
   '@rushstack/heft-config-file@0.14.14':
@@ -1089,6 +1092,11 @@ packages:
   human-signals@2.1.0:
     resolution: {integrity: sha512-B4FFZ6q/T2jhhksgkbEW3HBvWIfDW85snkQgawt07S7J5QXTk6BkNV+0yAeZrM5QpMAdYlocGoljn0sJ/WQkFw==}
     engines: {node: '>=10.17.0'}
+
+  husky@9.1.7:
+    resolution: {integrity: sha512-5gs5ytaNjBrh5Ow3zrvdUUY+0VxIuWVL4i9irt6friV+BqdCfmV11CQTWMiBYWHbXhco+J1kHfTOUkePhCDvMA==}
+    engines: {node: '>=18'}
+    hasBin: true
 
   ignore@5.1.9:
     resolution: {integrity: sha512-2zeMQpbKz5dhZ9IwL0gbxSW5w0NK/MSAMtNuhgIHEPmaU3vPdKPL0UdvUCXs5SS4JAwsBxysK5sFMW8ocFiVjQ==}
@@ -2704,11 +2712,14 @@ snapshots:
 
   '@rush-temp/heft-stylelint-plugin@file:projects/heft-stylelint-plugin.tgz(@babel/core@7.28.5)(@jest/transform@29.7.0)(@jest/types@29.6.3)(babel-jest@29.7.0(@babel/core@7.28.5))(jest-environment-node@29.7.0)(jest-util@29.7.0)(postcss@8.5.6)':
     dependencies:
+      '@commitlint/cli': 20.1.0(@types/node@18.19.130)(typescript@5.7.3)
+      '@commitlint/config-conventional': 20.0.0
       '@rushstack/heft': 1.1.5(@types/node@18.19.130)
       '@rushstack/heft-jest-plugin': 1.1.5(@rushstack/heft@1.1.5(@types/node@18.19.130))(@types/node@18.19.130)(jest-environment-node@29.7.0)
       '@rushstack/heft-typescript-plugin': 0.4.0(@rushstack/heft@1.1.5(@types/node@18.19.130))(@types/node@18.19.130)
       '@types/jest': 29.5.14
       '@types/node': 18.19.130
+      husky: 9.1.7
       jest: 29.7.0(@types/node@18.19.130)
       stylelint: 16.25.0(typescript@5.7.3)
       stylelint-config-standard-scss: 16.0.0(postcss@8.5.6)(stylelint@16.25.0(typescript@5.7.3))
@@ -3422,6 +3433,8 @@ snapshots:
   html-tags@3.3.1: {}
 
   human-signals@2.1.0: {}
+
+  husky@9.1.7: {}
 
   ignore@5.1.9: {}
 

@@ -26,6 +26,8 @@
     "stylelint-config-standard-scss": "16.0.0"
   },
   "devDependencies": {
+    "@commitlint/cli": "~20.1.0",
+    "@commitlint/config-conventional": "~20.0.0",
     "@rushstack/heft": "~1.1.5",
     "@rushstack/heft-jest-plugin": "~1.1.5",
     "@rushstack/heft-typescript-plugin": "~0.4.0",

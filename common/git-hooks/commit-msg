@@ -2,5 +2,14 @@
 # Rush-managed Git hook for commit message validation
 # This hook is automatically installed by "rush install"
 
-# Run commitlint to validate the commit message
-npx --no -- commitlint --edit $1
+# Get the repo root directory (2 levels up from common/git-hooks)
+REPO_ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
+
+# Change to repo root so commitlint can find the config
+cd "$REPO_ROOT"
+
+# Set NODE_PATH to include the common/temp node_modules
+export NODE_PATH="$REPO_ROOT/common/temp/node_modules:$NODE_PATH"
+
+# Run commitlint using the common/temp node_modules
+"$REPO_ROOT/common/temp/node_modules/.bin/commitlint" --edit "$1"
