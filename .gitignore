@@ -2,6 +2,7 @@
 common/temp/
 common/scripts/install-run.js
 common/scripts/install-run-rush.js
+rush-logs/
 
 # Logs
 *.log
@@ -17,15 +18,6 @@ lib-commonjs/
 temp/
 *.build.log
 *.build.error.log
-
-# IDEs
-.vscode/
-.idea/
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
 
 # OS files
 .DS_Store
