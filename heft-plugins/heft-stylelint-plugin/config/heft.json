@@ -7,6 +7,22 @@
           "taskPlugin": {
             "pluginPackage": "@rushstack/heft-typescript-plugin"
           }
+        },
+        "copy-json-schema": {
+          "taskPlugin": {
+            "pluginPackage": "@rushstack/heft",
+            "pluginName": "copy-files-plugin",
+            "options": {
+              "copyOperations": [
+                {
+                  "sourcePath": "src/schemas",
+                  "destinationFolders": ["lib/schemas"],
+                  "fileExtensions": [".schema.json"],
+                  "hardlink": true
+                }
+              ]
+            }
+          }
         }
       }
     },
