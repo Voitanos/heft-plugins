@@ -1,0 +1,32 @@
+# Rush files
+common/temp/
+common/scripts/install-run.js
+common/scripts/install-run-rush.js
+
+# Logs
+*.log
+npm-debug.log*
+
+# Dependency directories
+node_modules/
+
+# Build outputs
+dist/
+lib/
+lib-commonjs/
+temp/
+*.build.log
+*.build.error.log
+
+# IDEs
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# OS files
+.DS_Store
+Thumbs.db

@@ -1,0 +1,63 @@
+{
+  "name": "@voitanos/heft-stylelint-plugin",
+  "description": "A Heft plugin for using Stylelint.",
+  "version": "0.0.1",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Voitanos/heft-plugins",
+    "directory": "heft-plugins/heft-stylelint-plugin"
+  },
+  "license": "MIT",
+  "type": "module",
+  "main": "lib/index.js",
+  "typings": "lib/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./lib/index.js",
+      "types": "./lib/index.d.ts"
+    }
+  },
+  "scripts": {
+    "build": "heft build --clean",
+    "test": "heft test --clean"
+  },
+  "dependencies": {
+    "stylelint": "16.25.0",
+    "stylelint-config-standard-scss": "16.0.0"
+  },
+  "devDependencies": {
+    "@rushstack/heft": "~1.1.5",
+    "@rushstack/heft-jest-plugin": "~1.1.5",
+    "@rushstack/heft-typescript-plugin": "~0.4.0",
+    "@types/jest": "^29.5.0",
+    "@types/node": "^18.19.0",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.2.0",
+    "typescript": "~5.7.2"
+  },
+  "peerDependencies": {
+    "@rushstack/heft": ">=1.0.0 <2.0.0"
+  },
+  "keywords": [
+    "rush",
+    "rushstack",
+    "heft",
+    "heft plugin",
+    "style",
+    "style sheet",
+    "stylelint",
+    "scss",
+    "sass",
+    "css",
+    "lint"
+  ],
+  "homepage": "https://github.com/Voitanos/heft-plugins",
+  "issues": "https://github.com/Voitanos/heft-plugins/issues",
+  "author": "Andrew Connell <andrew@voitanos.io>",
+  "maintainers": [
+    {
+      "name": "andrewconnell",
+      "email": "andrew@voitanos.io"
+    }
+  ]
+}
