@@ -16,7 +16,7 @@ export interface IStylelintPluginOptions { }
 export default class StylelintPlugin implements IHeftTaskPlugin<IStylelintPluginOptions> {
 
   public apply(taskSession: IHeftTaskSession, heftConfiguration: HeftConfiguration, options: IStylelintPluginOptions): void {
-    taskSession.hooks.run.tap({
+    taskSession.hooks.run.tapPromise({
       name: PLUGIN_NAME,
       stage: Number.MIN_SAFE_INTEGER
     }, async () => {
