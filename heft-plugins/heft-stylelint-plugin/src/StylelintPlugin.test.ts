@@ -13,7 +13,8 @@ describe('StylelintPlugin', () => {
     mockTaskSession = {
       hooks: {
         run: {
-          tap: jest.fn()
+          tap: jest.fn(),
+          tapPromise: jest.fn()
         }
       },
       logger: {
@@ -46,7 +47,7 @@ describe('StylelintPlugin', () => {
 
       plugin.apply(mockTaskSession, mockHeftConfiguration, options);
 
-      expect(mockTaskSession.hooks.run.tap).toHaveBeenCalledWith(
+      expect(mockTaskSession.hooks.run.tapPromise).toHaveBeenCalledWith(
         expect.objectContaining({
           name: PLUGIN_NAME,
           stage: Number.MIN_SAFE_INTEGER
@@ -60,7 +61,7 @@ describe('StylelintPlugin', () => {
 
       plugin.apply(mockTaskSession, mockHeftConfiguration, options);
 
-      const tapCall = (mockTaskSession.hooks.run.tap as jest.Mock).mock.calls[0];
+      const tapCall = (mockTaskSession.hooks.run.tapPromise as jest.Mock).mock.calls[0];
       expect(tapCall[0].stage).toBe(Number.MIN_SAFE_INTEGER);
     });
   });
