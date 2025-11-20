@@ -25,12 +25,12 @@ export default class StylelintPlugin implements IHeftTaskPlugin<IStylelintPlugin
       const stylelintPkg = JSON.parse(readFileSync(stylelintPkgPath, 'utf-8'));
       taskSession.logger.terminal.writeLine(`Using Stylelint version ${stylelintPkg.version}`)
       if (taskSession.parameters.verbose) {
-        taskSession.logger.terminal.writeLine(`path ${heftConfiguration.buildFolderPath}`)
+        taskSession.logger.terminal.writeVerboseLine(`path ${heftConfiguration.buildFolderPath}`)
       }
 
       // run stylelint on SCSS & CSS files using Node.js API
       if (taskSession.parameters.verbose) {
-        taskSession.logger.terminal.writeLine('linting...');
+        taskSession.logger.terminal.writeVerboseLine('linting...');
       }
       const result = await stylelint.lint({
         files: 'src/**/*.scss',
@@ -39,7 +39,7 @@ export default class StylelintPlugin implements IHeftTaskPlugin<IStylelintPlugin
       });
 
       if (taskSession.parameters.verbose) {
-        taskSession.logger.terminal.writeLine(`results: ${JSON.stringify(result)}`);
+        taskSession.logger.terminal.writeVerboseLine(`results: ${JSON.stringify(result)}`);
       }
 
       // process results
