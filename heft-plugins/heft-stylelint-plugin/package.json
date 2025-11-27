@@ -17,6 +17,7 @@
   "typings": "lib/index.d.ts",
   "files": [
     "lib/",
+    "scripts/",
     "heft-plugin.json"
   ],
   "exports": {
@@ -28,7 +29,8 @@
   "scripts": {
     "build": "heft build --clean",
     "test": "heft test --clean",
-    "start": "heft build-watch"
+    "start": "heft build-watch",
+    "postinstall": "node scripts/postinstall.js"
   },
   "dependencies": {
     "@voitanos/heft-plugins-telemetry-core": "0.1.0",
