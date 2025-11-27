@@ -1,11 +1,11 @@
 {
-  "name": "@voitanos/heft-stylelint-plugin",
-  "description": "A Heft plugin for using Stylelint.",
-  "version": "0.1.0-beta.6",
+  "name": "@voitanos/heft-plugins-telemetry-core",
+  "description": "Shared telemetry client for @voitanos Heft plugins.",
+  "version": "0.1.0",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Voitanos/heft-plugins.git",
-    "directory": "heft-plugins/heft-stylelint-plugin"
+    "directory": "packages/telemetry-core"
   },
   "license": "MIT",
   "publishConfig": {
@@ -16,8 +16,7 @@
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
   "files": [
-    "lib/",
-    "heft-plugin.json"
+    "lib/"
   ],
   "exports": {
     ".": {
@@ -27,17 +26,16 @@
   },
   "scripts": {
     "build": "heft build --clean",
+    "build:inject": "heft build --clean && node scripts/inject-connection-string.js",
+    "inject-connection-string": "node scripts/inject-connection-string.js",
     "test": "heft test --clean",
     "start": "heft build-watch"
   },
   "dependencies": {
-    "@voitanos/heft-plugins-telemetry-core": "0.1.0",
-    "stylelint": "16.25.0",
-    "stylelint-config-standard-scss": "16.0.0"
+    "applicationinsights": "^2.9.5",
+    "ci-info": "^4.0.0"
   },
   "devDependencies": {
-    "@commitlint/cli": "~20.1.0",
-    "@commitlint/config-conventional": "~20.0.0",
     "@rushstack/heft": "~1.1.5",
     "@rushstack/heft-jest-plugin": "~1.1.5",
     "@rushstack/heft-typescript-plugin": "~1.1.5",
@@ -47,21 +45,12 @@
     "ts-jest": "^29.2.0",
     "typescript": "~5.7.2"
   },
-  "peerDependencies": {
-    "@rushstack/heft": ">=1.0.0 <2.0.0"
-  },
   "keywords": [
-    "rush",
-    "rushstack",
+    "telemetry",
+    "application-insights",
     "heft",
-    "heft plugin",
-    "style",
-    "style sheet",
-    "stylelint",
-    "scss",
-    "sass",
-    "css",
-    "lint"
+    "heft-plugins",
+    "voitanos"
   ],
   "homepage": "https://github.com/Voitanos/heft-plugins",
   "issues": "https://github.com/Voitanos/heft-plugins/issues",
@@ -71,6 +60,5 @@
       "name": "andrewconnell",
       "email": "andrew@voitanos.io"
     }
-  ],
-  "packageManager": "pnpm@10.22.0+sha512.bf049efe995b28f527fd2b41ae0474ce29186f7edcb3bf545087bd61fbbebb2bf75362d1307fda09c2d288e1e499787ac12d4fcb617a974718a6051f2eee741c"
+  ]
 }
