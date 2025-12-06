@@ -5,14 +5,14 @@
  * Usage:
  *   node scripts/inject-connection-string.js
  *
- * The connection string is read from the APP_INSIGHTS_CONNECTION_STRING environment variable.
+ * The connection string is read from the HEFT_PLUGINS_APP_INSIGHTS_CONNECTION_STRING environment variable.
  * If not set, the script logs a warning but does not fail (allows local development).
  *
  * For local development with 1Password:
  *   op run --env-file=.env -- node scripts/inject-connection-string.js
  *
  * Or set the environment variable directly:
- *   APP_INSIGHTS_CONNECTION_STRING="InstrumentationKey=..." node scripts/inject-connection-string.js
+ *   HEFT_PLUGINS_APP_INSIGHTS_CONNECTION_STRING="InstrumentationKey=..." node scripts/inject-connection-string.js
  */
 
 import * as fs from 'node:fs';
@@ -22,7 +22,7 @@ import { fileURLToPath } from 'node:url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const PLACEHOLDER = '__APP_INSIGHTS_CONNECTION_STRING__';
+const PLACEHOLDER = '__HEFT_PLUGINS_APP_INSIGHTS_CONNECTION_STRING__';
 const LIB_DIR = path.resolve(__dirname, '../lib');
 
 /**
@@ -63,12 +63,12 @@ function replaceInFile(filePath, connectionString) {
  * Main function
  */
 function main() {
-  const connectionString = process.env.APP_INSIGHTS_CONNECTION_STRING;
+  const connectionString = process.env.HEFT_PLUGINS_APP_INSIGHTS_CONNECTION_STRING;
 
   console.log('Injecting Application Insights connection string...\n');
 
   if (!connectionString) {
-    console.warn('WARNING: APP_INSIGHTS_CONNECTION_STRING environment variable is not set.');
+    console.warn('WARNING: HEFT_PLUGINS_APP_INSIGHTS_CONNECTION_STRING environment variable is not set.');
     console.warn('Telemetry will be disabled at runtime.\n');
     console.warn('For local development with 1Password:');
     console.warn('  op run --env-file=.env -- node scripts/inject-connection-string.js\n');

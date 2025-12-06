@@ -12,11 +12,11 @@ import type { TelemetryClient as AppInsightsTelemetryClient } from 'applicationi
 import type {
   TelemetryConfig,
   TelemetryContext,
-} from './types.js';
+} from './types';
 import {
   TelemetryEventType,
   PluginOutcome,
-} from './types.js';
+} from './types';
 import {
   isTelemetryDisabled,
   sanitizeErrorMessage,
@@ -27,13 +27,13 @@ import {
   getIsCIEnvironment,
   generateSessionId,
   truncateString,
-} from './utils.js';
+} from './utils';
 
 /**
  * Default connection string placeholder.
  * This is replaced during the build process with the actual connection string.
  */
-const DEFAULT_CONNECTION_STRING = '__APP_INSIGHTS_CONNECTION_STRING__';
+const DEFAULT_CONNECTION_STRING = '__HEFT_PLUGINS_APP_INSIGHTS_CONNECTION_STRING__';
 
 /**
  * TelemetryClient for tracking plugin usage and performance.
@@ -105,13 +105,13 @@ export class TelemetryClient {
         appInsights
           .setup(connectionString)
           .setAutoCollectRequests(false)
-          .setAutoCollectPerformance(false)
-          .setAutoCollectExceptions(false)
-          .setAutoCollectDependencies(false)
+          .setAutoCollectPerformance(true)
+          .setAutoCollectExceptions(true)
+          .setAutoCollectDependencies(true)
           .setAutoCollectConsole(false)
-          .setAutoCollectPreAggregatedMetrics(false)
-          .setAutoDependencyCorrelation(false)
-          .setSendLiveMetrics(false)
+          .setAutoCollectPreAggregatedMetrics(true)
+          .setAutoDependencyCorrelation(true)
+          .setSendLiveMetrics(true)
           .start();
 
         this._client = appInsights.defaultClient;
@@ -140,7 +140,7 @@ export class TelemetryClient {
     // Priority: config > environment > default
     return (
       configConnectionString ||
-      process.env.APP_INSIGHTS_CONNECTION_STRING ||
+      process.env.HEFT_PLUGINS_APP_INSIGHTS_CONNECTION_STRING ||
       DEFAULT_CONNECTION_STRING
     );
   }
