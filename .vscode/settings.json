@@ -2,5 +2,6 @@
   "conventionalCommits.scopes": [
     "publish",
     "heft-stylelint-plugin",
+    "telemetry-core"
   ]
 }
