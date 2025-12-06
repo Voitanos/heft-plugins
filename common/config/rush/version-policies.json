@@ -1,6 +1,11 @@
 [
   {
     "definitionName": "individualVersion",
+    "policyName": "telemetry-core-policy",
+    "lockedMajor": 0
+  },
+  {
+    "definitionName": "individualVersion",
     "policyName": "heft-stylelint-plugin-policy",
     "lockedMajor": 0
   }

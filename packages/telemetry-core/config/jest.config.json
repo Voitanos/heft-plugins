@@ -1,8 +1,7 @@
 {
   "testMatch": ["<rootDir>/src/**/*.test.ts"],
   "moduleNameMapper": {
-    "^(\\.{1,2}/.*)\\.js$": "$1",
-    "^@voitanos/heft-plugins-telemetry-core$": "<rootDir>/../../packages/telemetry-core/src/index.ts"
+    "^(\\.{1,2}/.*)\\.js$": "$1"
   },
   "extensionsToTreatAsEsm": [".ts"],
   "transform": {

@@ -4,6 +4,7 @@ on:
   push:
     tags:
       - 'heft-*-plugin@v*.*.*'
+      - 'telemetry-core@v*.*.*'
 
 permissions:
   contents: write
@@ -67,7 +68,7 @@ jobs:
       - name: Extract package name, version, and determine dist-tag
         id: version
         run: |
-          # Extract from tag format: heft-stylelint-plugin@v0.1.0
+          # Extract from tag format: heft-stylelint-plugin@v0.1.0 or telemetry-core@v0.1.0
           FULL_TAG=${GITHUB_REF#refs/tags/}
           PACKAGE_SHORT_NAME=${FULL_TAG%@v*}
           VERSION=${FULL_TAG#*@v}
@@ -75,7 +76,23 @@ jobs:
           echo "package_short_name=$PACKAGE_SHORT_NAME" >> $GITHUB_OUTPUT
           echo "version=$VERSION" >> $GITHUB_OUTPUT
 
-          echo "Publishing package from directory: heft-plugins/${PACKAGE_SHORT_NAME}"
+          # Map package short name to folder path
+          # Plugins live in heft-plugins/, libraries live in packages/
+          case $PACKAGE_SHORT_NAME in
+            heft-*-plugin)
+              PACKAGE_PATH="heft-plugins/${PACKAGE_SHORT_NAME}"
+              ;;
+            telemetry-core)
+              PACKAGE_PATH="packages/${PACKAGE_SHORT_NAME}"
+              ;;
+            *)
+              echo "Error: Unknown package '${PACKAGE_SHORT_NAME}'"
+              exit 1
+              ;;
+          esac
+
+          echo "package_path=$PACKAGE_PATH" >> $GITHUB_OUTPUT
+          echo "Publishing package from directory: $PACKAGE_PATH"
           echo "Version: $VERSION"
 
           # Determine NPM dist-tag based on version format
@@ -96,10 +113,15 @@ jobs:
       - name: Get package full name from package.json
         id: package
         run: |
-          cd heft-plugins/${{ steps.version.outputs.package_short_name }}
+          cd ${{ steps.version.outputs.package_path }}
           PACKAGE_NAME=$(node -p "require('./package.json').name")
           echo "name=$PACKAGE_NAME" >> $GITHUB_OUTPUT
           echo "Full package name: $PACKAGE_NAME"
+
+      - name: Inject AppInsights connection string into @voitanos/heft-plugins-telemetry-core
+        run: node packages/telemetry-core/scripts/inject-connection-string.js
+        env:
+          HEFT_PLUGINS_APP_INSIGHTS_CONNECTION_STRING: ${{ vars.HEFT_PLUGINS_APP_INSIGHTS_CONNECTION_STRING }}
 
       - name: Configure npm for OIDC authentication
         run: |
@@ -109,7 +131,7 @@ jobs:
 
       - name: Publish specific package to NPM with provenance
         run: |
-          cd heft-plugins/${{ steps.version.outputs.package_short_name }}
+          cd ${{ steps.version.outputs.package_path }}
           npm publish --access public --tag ${{ steps.version.outputs.dist_tag }} --provenance
 
       - name: Create GitHub Release
