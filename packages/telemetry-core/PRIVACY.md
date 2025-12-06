@@ -1,6 +1,6 @@
 # Privacy & Telemetry Information
 
-This document explains what telemetry data is collected by @voitanos Heft plugins and how to disable it.
+This explains what telemetry data is collected by @voitanos Heft plugins and how to disable it.
 
 ## Overview
 
@@ -88,4 +88,4 @@ This privacy policy may be updated from time to time. Changes will be documented
 
 ---
 
-Last Updated: 2025
+Last Updated: December 6, 2025
