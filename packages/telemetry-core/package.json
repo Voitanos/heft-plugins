@@ -1,7 +1,7 @@
 {
   "name": "@voitanos/heft-plugins-telemetry-core",
   "description": "Shared telemetry client for @voitanos Heft plugins.",
-  "version": "0.1.0",
+  "version": "0.1.0-beta.1",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Voitanos/heft-plugins.git",
@@ -26,8 +26,10 @@
   },
   "scripts": {
     "build": "heft build --clean",
-    "build:inject": "heft build --clean && node scripts/inject-connection-string.js",
-    "inject-connection-string": "node scripts/inject-connection-string.js",
+    "build:inject": "npm run build && export HEFT_PLUGINS_APP_INSIGHTS_CONNECTION_STRING=$(op read 'op://Private/heft-plugins Azure App Insights/connection string') && op run -- node scripts/inject-connection-string.js",
+    "build:prod": "npm run build && npm run set-azappinsights-connection-string && npm run inject-azappinsights-connection-string",
+    "set-azappinsights-connection-string": "export HEFT_PLUGINS_APP_INSIGHTS_CONNECTION_STRING='op://Private/heft-plugins Azure App Insights/connection string'",
+    "inject-azappinsights-connection-string": "op run -- node scripts/inject-connection-string.js",
     "test": "heft test --clean",
     "start": "heft build-watch"
   },
