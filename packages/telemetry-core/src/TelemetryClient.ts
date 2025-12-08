@@ -12,11 +12,11 @@ import type { TelemetryClient as AppInsightsTelemetryClient } from 'applicationi
 import type {
   TelemetryConfig,
   TelemetryContext,
-} from './types';
+} from './types.js';
 import {
   TelemetryEventType,
   PluginOutcome,
-} from './types';
+} from './types.js';
 import {
   isTelemetryDisabled,
   sanitizeErrorMessage,
@@ -27,7 +27,7 @@ import {
   getIsCIEnvironment,
   generateSessionId,
   truncateString,
-} from './utils';
+} from './utils.js';
 
 /**
  * Default connection string placeholder.
