@@ -155,3 +155,30 @@ export function getIsCIEnvironment(): boolean {
 export function generateSessionId(): string {
   return crypto.randomBytes(16).toString('hex');
 }
+
+/**
+ * Validates that a connection string appears to be a valid Azure Application Insights connection string.
+ *
+ * @remarks
+ * Azure Application Insights connection strings typically contain an InstrumentationKey
+ * and/or an IngestionEndpoint. This function checks for the presence of these markers
+ * rather than checking for placeholder values, which avoids issues with build-time
+ * string replacement.
+ *
+ * @param connectionString - The connection string to validate.
+ * @returns `true` if the connection string appears valid, `false` otherwise.
+ */
+export function isValidConnectionString(connectionString: string): boolean {
+  if (!connectionString || typeof connectionString !== 'string') {
+    return false;
+  }
+
+  // Azure Application Insights connection strings contain either:
+  // - InstrumentationKey=<guid>
+  // - IngestionEndpoint=<url>
+  // A valid connection string should have at least one of these
+  return (
+    connectionString.includes('InstrumentationKey=') ||
+    connectionString.includes('IngestionEndpoint=')
+  );
+}

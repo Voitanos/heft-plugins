@@ -27,11 +27,21 @@ import {
   getIsCIEnvironment,
   generateSessionId,
   truncateString,
+  isValidConnectionString,
 } from './utils.js';
 
 /**
  * Default connection string placeholder.
- * This is replaced during the build process with the actual connection string.
+ *
+ * @remarks
+ * This placeholder is replaced during the CI/CD build process with the actual
+ * Azure Application Insights connection string. The replacement happens via
+ * the `inject-connection-string.js` script before publishing.
+ *
+ * At runtime, the `isValidConnectionString()` function validates that the
+ * connection string looks like a real App Insights connection string (contains
+ * InstrumentationKey= or IngestionEndpoint=), which will fail if this placeholder
+ * was not replaced.
  */
 const DEFAULT_CONNECTION_STRING = '__HEFT_PLUGINS_APP_INSIGHTS_CONNECTION_STRING__';
 
@@ -94,8 +104,10 @@ export class TelemetryClient {
     if (this._enabled) {
       const connectionString = this._getConnectionString(config.connectionString);
 
-      // Check if we have a valid connection string
-      if (!connectionString || connectionString === DEFAULT_CONNECTION_STRING) {
+      // Check if we have a valid connection string format
+      // This validates the string looks like an App Insights connection string
+      // rather than checking for placeholder values (which would be replaced at build time)
+      if (!isValidConnectionString(connectionString)) {
         this._enabled = false;
         return;
       }
