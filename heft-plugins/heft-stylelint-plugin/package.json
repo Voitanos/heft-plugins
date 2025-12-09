@@ -1,7 +1,7 @@
 {
   "name": "@voitanos/heft-stylelint-plugin",
   "description": "A Heft plugin for using Stylelint.",
-  "version": "0.1.0-beta.10",
+  "version": "0.1.0-beta.11",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Voitanos/heft-plugins.git",
@@ -33,7 +33,7 @@
     "postinstall": "node scripts/postinstall.js"
   },
   "dependencies": {
-    "@voitanos/heft-plugins-telemetry-core": "0.1.0-beta.4",
+    "@voitanos/heft-plugins-telemetry-core": "0.1.0-beta.5",
     "stylelint": "16.25.0",
     "stylelint-config-standard-scss": "16.0.0"
   },
