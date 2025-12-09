@@ -1,71 +1,129 @@
 name: Publish NPM Package
 
+defaults:
+  run:
+    shell: bash
+
 on:
   push:
     tags:
       - 'heft-*-plugin@v*.*.*'
       - 'telemetry-core@v*.*.*'
 
+env:
+  NODE_VERSION: '22'
+  RUSH_VERSION: '5.162.0'
+  # Azure AppInsights connection string for all plugins
+  #   HEFT_PLUGINS_APP_INSIGHTS_CONNECTION_STRING: <repo.variable>
+
 permissions:
   contents: write
+  # used for npmjs.org trusted publishers
+  #   - https://docs.npmjs.com/trusted-publishers
+  #   - https://docs.github.com/en/actions/concepts/security/openid-connect
   id-token: write
 
 jobs:
+  ######################################################################
+  # ensure build completes without errors & tests pass
+  ######################################################################
   validate:
     name: Validate Build
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout code
+      ######################################################################
+      # checkout codebase
+      ######################################################################
+      - name: Checkout repo codebase
         uses: actions/checkout@v4
 
-      - name: Setup Node.js
+      ######################################################################
+      # configure to use Node.js version
+      ######################################################################
+      - name: 🔧  Setup Node v${{ env.NODE_VERSION }}
         uses: actions/setup-node@v4
         with:
-          node-version: '22'
+          node-version: ${{ env.NODE_VERSION }}
 
-      - name: Install Rush
-        run: npm install -g @microsoft/rush@5.162.0
+      ######################################################################
+      # install Rush
+      ######################################################################
+      - name: ⚙️  Install Rush v${{ env.RUSH_VERSION }}
+        run: npm install -g @microsoft/rush@${{ env.RUSH_VERSION }}
 
-      - name: Install dependencies
+      ######################################################################
+      # install dependencies
+      ######################################################################
+      - name: ⬇️  Install dependencies
         run: rush update
 
-      - name: Build packages
+      ######################################################################
+      # build all packages
+      ######################################################################
+      - name: 🙏  Build all packages
         run: rush rebuild --verbose
 
-      - name: Run tests
+      ######################################################################
+      # run tests
+      ######################################################################
+      - name: 🧪  Run all tests
         run: rush test
 
+  ######################################################################
+  # publish package to npmjs.org
+  ######################################################################
   publish:
-    name: Publish to NPM
-    needs: validate
+    name: Publish to npmjs.org
+    needs: [validate]
     runs-on: ubuntu-latest
     # environment: production  # Temporarily disabled for testing
-
     steps:
-      - name: Checkout code
+      ######################################################################
+      # checkout codebase
+      ######################################################################
+      - name: Checkout repo codebase
         uses: actions/checkout@v4
 
-      - name: Setup Node.js
+      ######################################################################
+      # configure to use Node.js version
+      ######################################################################
+      - name: 🔧  Setup Node v${{ env.NODE_VERSION }}
         uses: actions/setup-node@v4
         with:
-          node-version: '22'
+          node-version: ${{ env.NODE_VERSION }}
           registry-url: 'https://registry.npmjs.org'
 
-      # npm v11.5.1+ required for trusted publishing
-      - name: Update npm (v11.5.1+)
+      ######################################################################
+      # update npm to v11.5.1+ (required for npmjs.org trusted publishing)
+      ######################################################################
+      - name: ⚙️  Update npm (v11.5.1+)
         run: npm install -g npm@latest
 
-      - name: Install Rush
-        run: npm install -g @microsoft/rush@5.162.0
+      ######################################################################
+      # install Rush
+      ######################################################################
+      - name: ⚙️  Install Rush v${{ env.RUSH_VERSION }}
+        run: npm install -g @microsoft/rush@${{ env.RUSH_VERSION }}
 
-      - name: Install dependencies
+      ######################################################################
+      # install dependencies
+      ######################################################################
+      - name: ⬇️  Install dependencies
         run: rush update
 
-      - name: Build packages
+      ######################################################################
+      # build all packages
+      ######################################################################
+      - name: 🙏  Build all packages
         run: rush rebuild --verbose
 
-      - name: Extract package name, version, and determine dist-tag
+      ######################################################################
+      # get details about package:
+      #   - name
+      #   - version
+      #   - distro tag: @latest | @next
+      ######################################################################
+      - name: 🪏  Extract package name, version, and determine dist-tag
         id: version
         run: |
           # Extract from tag format: heft-stylelint-plugin@v0.1.0 or telemetry-core@v0.1.0
@@ -110,7 +168,10 @@ jobs:
             echo "prerelease=false" >> $GITHUB_OUTPUT
           fi
 
-      - name: Get package full name from package.json
+      ######################################################################
+      # get package full name from package.json
+      ######################################################################
+      - name: 🪏  Get package full name from package.json
         id: package
         run: |
           cd ${{ steps.version.outputs.package_path }}
@@ -118,12 +179,20 @@ jobs:
           echo "name=$PACKAGE_NAME" >> $GITHUB_OUTPUT
           echo "Full package name: $PACKAGE_NAME"
 
-      - name: Inject AppInsights connection string into @voitanos/heft-plugins-telemetry-core
+      ######################################################################
+      # inject Azure Application Insights connection string into
+      #   @voitanos/heft-plugins-telemetry-core package with utility script
+      ######################################################################
+      - name: 💉  Inject AppInsights connection string into @voitanos/heft-plugins-telemetry-core
         run: node packages/telemetry-core/scripts/inject-connection-string.js
         env:
           HEFT_PLUGINS_APP_INSIGHTS_CONNECTION_STRING: ${{ vars.HEFT_PLUGINS_APP_INSIGHTS_CONNECTION_STRING }}
 
-      - name: Verify connection string was injected
+      ######################################################################
+      # gating function check - ensure AppInsights connection string injected
+      #   - if not, fail the job... must be valid
+      ######################################################################
+      - name: 🧪  Verify Az AppInsights connection string injected
         run: |
           # Check that the placeholder was replaced in the built telemetry-core package
           TELEMETRY_FILE="packages/telemetry-core/lib/TelemetryClient.js"
@@ -149,18 +218,28 @@ jobs:
 
           echo "Connection string successfully injected and validated"
 
-      - name: Configure npm for OIDC authentication
+      ######################################################################
+      # configure npm for OIDC authentication
+      #   > https://docs.npmjs.com/trusted-publishers
+      ######################################################################
+      - name: 🔧  Configure npm for OIDC authentication
         run: |
           npm config delete //registry.npmjs.org/:_authToken 2>/dev/null || true
           npm config delete always-auth 2>/dev/null || true
           npm config delete //registry.npmjs.org/:always-auth 2>/dev/null || true
 
-      - name: Publish specific package to NPM with provenance
+      ######################################################################
+      # publish package to npmjs.org based on tag that triggered workflow
+      ######################################################################
+      - name: 🚀  Publish specific package to NPM with provenance
         run: |
           cd ${{ steps.version.outputs.package_path }}
           npm publish --access public --tag ${{ steps.version.outputs.dist_tag }} --provenance
 
-      - name: Create GitHub Release
+      ######################################################################
+      # publish package to npmjs.org based on tag that triggered workflow
+      ######################################################################
+      - name: 📦  Create GitHub release
         uses: softprops/action-gh-release@v1
         with:
           name: ${{ steps.package.outputs.name }}@${{ steps.version.outputs.version }}
