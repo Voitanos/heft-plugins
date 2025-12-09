@@ -1,7 +1,7 @@
 {
   "name": "@voitanos/heft-plugins-telemetry-core",
   "description": "Shared telemetry client for @voitanos Heft plugins.",
-  "version": "0.1.0-beta.3",
+  "version": "0.1.0-beta.4",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Voitanos/heft-plugins.git",
