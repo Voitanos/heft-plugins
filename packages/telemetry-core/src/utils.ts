@@ -7,6 +7,8 @@
 
 import * as os from 'node:os';
 import * as crypto from 'node:crypto';
+import * as fs from 'node:fs';
+import * as path from 'node:path';
 import ciInfo from 'ci-info';
 
 /**
@@ -181,4 +183,36 @@ export function isValidConnectionString(connectionString: string): boolean {
     connectionString.includes('InstrumentationKey=') ||
     connectionString.includes('IngestionEndpoint=')
   );
+}
+
+/**
+ * Cached telemetry client version to avoid repeated file reads.
+ */
+let cachedTelemetryClientVersion: string | undefined;
+
+/**
+ * Gets the version of the telemetry-core package.
+ *
+ * @remarks
+ * Reads the version from the package.json file. The version is cached
+ * after the first read to avoid repeated file system operations.
+ *
+ * @returns The package version string, or "unknown" if it cannot be determined.
+ */
+export function getTelemetryClientVersion(): string {
+  if (cachedTelemetryClientVersion !== undefined) {
+    return cachedTelemetryClientVersion;
+  }
+
+  try {
+    // Try to find package.json by resolving the package name
+    // This works in both ESM and CommonJS contexts
+    const packageJsonPath = require.resolve('@voitanos/heft-plugins-telemetry-core/package.json');
+    const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'));
+    cachedTelemetryClientVersion = packageJson.version || 'unknown';
+  } catch {
+    cachedTelemetryClientVersion = 'unknown';
+  }
+
+  return cachedTelemetryClientVersion as string;
 }

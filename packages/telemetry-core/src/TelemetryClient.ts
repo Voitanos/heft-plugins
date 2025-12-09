@@ -28,6 +28,7 @@ import {
   generateSessionId,
   truncateString,
   isValidConnectionString,
+  getTelemetryClientVersion,
 } from './utils.js';
 
 /**
@@ -98,6 +99,7 @@ export class TelemetryClient {
       sessionId: generateSessionId(),
       pluginName: config.pluginName,
       pluginVersion: config.pluginVersion,
+      telemetryClientVersion: getTelemetryClientVersion(),
     };
 
     // Only initialize App Insights if telemetry is enabled
@@ -128,14 +130,25 @@ export class TelemetryClient {
 
         this._client = appInsights.defaultClient;
 
-        // Add telemetry initializer to enrich all events with context
+        // Add telemetry processor to enrich events with context and remove PII
         this._client.addTelemetryProcessor((envelope) => {
+          // Enrich with context properties
           if (envelope.data?.baseData?.properties) {
             envelope.data.baseData.properties = {
               ...envelope.data.baseData.properties,
               ...this._getContextProperties(),
             };
           }
+
+          // Remove City and Role Instance to prevent PII collection
+          // These are auto-collected by App Insights but we don't want them
+          if (envelope.tags) {
+            // ai.location.city - City derived from IP address
+            delete envelope.tags['ai.location.city'];
+            // ai.cloud.roleInstance - Machine/instance name
+            delete envelope.tags['ai.cloud.roleInstance'];
+          }
+
           return true;
         });
       } catch {
@@ -169,6 +182,7 @@ export class TelemetryClient {
       nodeVersion: this._context.nodeVersion,
       isCI: String(this._context.isCI),
       sessionId: this._context.sessionId,
+      telemetryClientVersion: this._context.telemetryClientVersion,
     };
   }
 

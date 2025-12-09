@@ -75,6 +75,11 @@ export interface TelemetryContext {
    * Version of the plugin.
    */
   pluginVersion: string;
+
+  /**
+   * Version of the telemetry-core package.
+   */
+  telemetryClientVersion: string;
 }
 
 /**
