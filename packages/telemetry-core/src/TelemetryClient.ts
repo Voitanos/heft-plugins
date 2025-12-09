@@ -6,7 +6,7 @@
  * It automatically sanitizes data to remove PII and respects user opt-out preferences.
  */
 
-import * as appInsights from 'applicationinsights';
+import appInsights from 'applicationinsights';
 import type { TelemetryClient as AppInsightsTelemetryClient } from 'applicationinsights';
 
 import type {
