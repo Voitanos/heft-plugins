@@ -123,6 +123,32 @@ jobs:
         env:
           HEFT_PLUGINS_APP_INSIGHTS_CONNECTION_STRING: ${{ vars.HEFT_PLUGINS_APP_INSIGHTS_CONNECTION_STRING }}
 
+      - name: Verify connection string was injected
+        run: |
+          # Check that the placeholder was replaced in the built telemetry-core package
+          TELEMETRY_FILE="packages/telemetry-core/lib/TelemetryClient.js"
+
+          if [ ! -f "$TELEMETRY_FILE" ]; then
+            echo "Error: Built file $TELEMETRY_FILE not found"
+            exit 1
+          fi
+
+          # Check if placeholder still exists (it shouldn't after injection)
+          if grep -q '__HEFT_PLUGINS_APP_INSIGHTS_CONNECTION_STRING__' "$TELEMETRY_FILE"; then
+            echo "Error: Connection string placeholder was not replaced!"
+            echo "The HEFT_PLUGINS_APP_INSIGHTS_CONNECTION_STRING variable may not be set in GitHub repository variables."
+            exit 1
+          fi
+
+          # Verify the connection string looks valid (contains InstrumentationKey or IngestionEndpoint)
+          if ! grep -qE '(InstrumentationKey=|IngestionEndpoint=)' "$TELEMETRY_FILE"; then
+            echo "Error: Injected connection string does not appear to be a valid App Insights connection string"
+            echo "Expected to find 'InstrumentationKey=' or 'IngestionEndpoint=' in the built file"
+            exit 1
+          fi
+
+          echo "Connection string successfully injected and validated"
+
       - name: Configure npm for OIDC authentication
         run: |
           npm config delete //registry.npmjs.org/:_authToken 2>/dev/null || true
