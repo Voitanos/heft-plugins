@@ -11,8 +11,8 @@ on:
       - 'telemetry-core@v*.*.*'
 
 env:
-  NODE_VERSION: '22'
-  RUSH_VERSION: '5.162.0'
+  VERSION_NODE: '22'
+  VERSION_RUSH: '5.162.0'
   # Azure AppInsights connection string for all plugins
   #   HEFT_PLUGINS_APP_INSIGHTS_CONNECTION_STRING: <repo.variable>
 
@@ -40,16 +40,16 @@ jobs:
       ######################################################################
       # configure to use Node.js version
       ######################################################################
-      - name: 🔧  Setup Node v${{ env.NODE_VERSION }}
+      - name: 🔧  Setup Node v${{ env.VERSION_NODE }}
         uses: actions/setup-node@v4
         with:
-          node-version: ${{ env.NODE_VERSION }}
+          node-version: ${{ env.VERSION_NODE }}
 
       ######################################################################
       # install Rush
       ######################################################################
-      - name: ⚙️  Install Rush v${{ env.RUSH_VERSION }}
-        run: npm install -g @microsoft/rush@${{ env.RUSH_VERSION }}
+      - name: ⚙️  Install Rush v${{ env.VERSION_RUSH }}
+        run: npm install -g @microsoft/rush@${{ env.VERSION_RUSH }}
 
       ######################################################################
       # install dependencies
@@ -87,10 +87,10 @@ jobs:
       ######################################################################
       # configure to use Node.js version
       ######################################################################
-      - name: 🔧  Setup Node v${{ env.NODE_VERSION }}
+      - name: 🔧  Setup Node v${{ env.VERSION_NODE }}
         uses: actions/setup-node@v4
         with:
-          node-version: ${{ env.NODE_VERSION }}
+          node-version: ${{ env.VERSION_NODE }}
           registry-url: 'https://registry.npmjs.org'
 
       ######################################################################
@@ -102,8 +102,8 @@ jobs:
       ######################################################################
       # install Rush
       ######################################################################
-      - name: ⚙️  Install Rush v${{ env.RUSH_VERSION }}
-        run: npm install -g @microsoft/rush@${{ env.RUSH_VERSION }}
+      - name: ⚙️  Install Rush v${{ env.VERSION_RUSH }}
+        run: npm install -g @microsoft/rush@${{ env.VERSION_RUSH }}
 
       ######################################################################
       # install dependencies
