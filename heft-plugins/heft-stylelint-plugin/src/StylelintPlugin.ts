@@ -1,11 +1,14 @@
 import * as path from 'node:path';
 import { readFileSync } from 'node:fs';
+import { createRequire } from 'node:module';
 import type {
   HeftConfiguration,
   IHeftTaskSession,
   IHeftTaskPlugin,
 } from '@rushstack/heft';
 import stylelint from 'stylelint';
+
+const require = createRequire(import.meta.url);
 import { TelemetryClient, PluginOutcome } from '@voitanos/heft-plugins-telemetry-core';
 
 export const PLUGIN_NAME: 'stylelint-plugin' = 'stylelint-plugin';
@@ -52,8 +55,8 @@ export default class StylelintPlugin implements IHeftTaskPlugin<IStylelintPlugin
       this._telemetry.trackPluginStarted();
 
       try {
-        // output version of stylelint
-        const stylelintPkgPath = path.join(heftConfiguration.buildFolderPath, 'node_modules/stylelint/package.json');
+        // output version of stylelint (resolve from plugin's own dependencies)
+        const stylelintPkgPath = require.resolve('stylelint/package.json');
         const stylelintPkg = JSON.parse(readFileSync(stylelintPkgPath, 'utf-8'));
         taskSession.logger.terminal.writeLine(`Using Stylelint version ${stylelintPkg.version}`)
         if (taskSession.parameters.verbose) {
@@ -64,9 +67,13 @@ export default class StylelintPlugin implements IHeftTaskPlugin<IStylelintPlugin
         if (taskSession.parameters.verbose) {
           taskSession.logger.terminal.writeVerboseLine('linting...');
         }
+        // Resolve the plugin's package directory to use as configBasedir
+        // This allows stylelint to find configs/plugins bundled with the plugin
+        const pluginPackageDir = path.dirname(require.resolve('@voitanos/heft-stylelint-plugin/package.json'));
         const result = await stylelint.lint({
           files: 'src/**/*.scss',
           configFile: path.join(heftConfiguration.buildFolderPath, '.stylelintrc'),
+          configBasedir: pluginPackageDir,
           cwd: heftConfiguration.buildFolderPath
         });
 
