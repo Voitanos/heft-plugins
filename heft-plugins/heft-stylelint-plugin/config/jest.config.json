@@ -1,10 +1,23 @@
 {
-  "testMatch": ["<rootDir>/src/**/*.test.ts"],
+  "collectCoverageFrom": [
+    "src/**/*.ts",
+    "!src/**/*.spec.ts",
+    "!src/**/__mocks__/**"
+  ],
+  "coverageThreshold": {
+    "global": {
+      "branches": 50,
+      "functions": 50,
+      "lines": 50,
+      "statements": 50
+    }
+  },
+  "extensionsToTreatAsEsm": [".ts"],
   "moduleNameMapper": {
     "^(\\.{1,2}/.*)\\.js$": "$1",
     "^@voitanos/heft-plugins-telemetry-core$": "<rootDir>/../../packages/telemetry-core/src/index.ts"
   },
-  "extensionsToTreatAsEsm": [".ts"],
+  "testMatch": ["<rootDir>/src/**/*.spec.ts"],
   "transform": {
     "^.+\\.tsx?$": [
       "ts-jest",
@@ -16,18 +29,5 @@
         }
       }
     ]
-  },
-  "collectCoverageFrom": [
-    "src/**/*.ts",
-    "!src/**/*.test.ts",
-    "!src/**/__mocks__/**"
-  ],
-  "coverageThreshold": {
-    "global": {
-      "branches": 50,
-      "functions": 50,
-      "lines": 50,
-      "statements": 50
-    }
   }
 }

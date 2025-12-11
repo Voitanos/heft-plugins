@@ -76,7 +76,7 @@ telemetry-core/
 │   ├── TelemetryClient.ts    # Main client implementation
 │   ├── types.ts              # TypeScript types and enums
 │   ├── utils.ts              # Utility functions
-│   └── utils.test.ts         # Unit tests
+│   └── utils.spec.ts         # Unit tests
 ├── scripts/
 │   └── inject-connection-string.js  # Build-time injection script
 ├── lib/                      # Compiled output (git-ignored)
@@ -121,7 +121,7 @@ heft test --clean
 npm run build:inject
 
 # Run specific test
-npx jest src/utils.test.ts
+npx jest src/utils.spec.ts
 ```
 
 ## Development Guidelines

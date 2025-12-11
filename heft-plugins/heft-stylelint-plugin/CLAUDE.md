@@ -68,7 +68,7 @@ heft-stylelint-plugin/
 ├── src/
 │   ├── index.ts                    # Plugin entry point
 │   ├── StylelintPlugin.ts          # Main implementation
-│   ├── StylelintPlugin.test.ts     # Unit tests
+│   ├── StylelintPlugin.spec.ts     # Unit tests
 │   └── schemas/
 │       └── heft-stylelint-plugin.schema.json  # Options schema
 ├── lib/                            # Compiled output (git-ignored)
@@ -106,7 +106,7 @@ heft-stylelint-plugin/
 
 ### Jest Configuration
 
-- **Test Pattern:** `src/**/*.test.ts`
+- **Test Pattern:** `src/**/*.spec.ts`
 - **Transform:** ts-jest with ESM support
 - **Module Mapping:** Maps `.js` imports to `.ts` files for testing
 - **Coverage Threshold:** 50% (branches, functions, lines, statements)
@@ -130,7 +130,7 @@ heft test --watch
 heft build-watch
 
 # Run specific test
-npx jest src/StylelintPlugin.test.ts
+npx jest src/StylelintPlugin.spec.ts
 
 # Run tests with coverage
 heft test --clean --coverage
