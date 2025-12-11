@@ -4,12 +4,10 @@
 
 # Get the repo root directory (2 levels up from common/git-hooks)
 REPO_ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
+AUTOINSTALLER_DIR="$REPO_ROOT/common/autoinstallers/rush-commitlint"
 
-# Change to repo root so commitlint can find the config
-cd "$REPO_ROOT"
+# Change to autoinstaller directory so commitlint can find config and dependencies
+cd "$AUTOINSTALLER_DIR"
 
-# Set NODE_PATH to include the common/temp node_modules
-export NODE_PATH="$REPO_ROOT/common/temp/node_modules:$NODE_PATH"
-
-# Run commitlint using the common/temp node_modules
-"$REPO_ROOT/common/temp/node_modules/.bin/commitlint" --edit "$1"
+# Run commitlint using the rush-commitlint autoinstaller
+"$AUTOINSTALLER_DIR/node_modules/.bin/commitlint" --edit "$1"

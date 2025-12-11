@@ -24,6 +24,11 @@
       "projectFolder": "heft-plugins/heft-stylelint-plugin",
       "reviewCategory": "plugins",
       "versionPolicyName": "heft-stylelint-plugin-policy"
+    },
+    {
+      "packageName": "spfx-react-webpart",
+      "projectFolder": "test-projects/spfx-react-webpart",
+      "shouldPublish": false
     }
   ]
 }
