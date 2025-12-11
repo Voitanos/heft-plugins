@@ -33,13 +33,11 @@
     "postinstall": "node scripts/postinstall.js"
   },
   "dependencies": {
-    "@voitanos/heft-plugins-telemetry-core": "0.1.0-beta.5",
+    "@voitanos/heft-plugins-telemetry-core": "workspace:^",
     "stylelint": "16.25.0",
     "stylelint-config-standard-scss": "16.0.0"
   },
   "devDependencies": {
-    "@commitlint/cli": "~20.1.0",
-    "@commitlint/config-conventional": "~20.0.0",
     "@rushstack/heft": "~1.1.5",
     "@rushstack/heft-jest-plugin": "~1.1.5",
     "@rushstack/heft-typescript-plugin": "~1.1.5",
